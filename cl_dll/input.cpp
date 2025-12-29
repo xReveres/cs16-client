@@ -46,6 +46,9 @@ extern cvar_t *in_joystick;
 int	in_impulse	= 0;
 int	in_cancel	= 0;
 
+#define m_pitch mpitch
+#define m_yaw myaw
+
 cvar_t	*m_pitch;
 cvar_t	*m_yaw;
 cvar_t	*m_forward;
@@ -724,8 +727,8 @@ void DLLEXPORT CL_CreateMove ( float frametime, struct usercmd_s *cmd, int activ
 	cmd->buttons = CL_ButtonBits( 1 );
 
 	// If they're in a modal dialog, ignore the attack button.
-	if ( GetClientVoice()->IsInSquelchMode() )
-		cmd->buttons &= ~IN_ATTACK;
+	// if ( GetClientVoice()->IsInSquelchMode() )
+	// 	cmd->buttons &= ~IN_ATTACK;
 
 	// Using joystick?
 	if ( in_joystick->value )

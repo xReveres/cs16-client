@@ -41,6 +41,9 @@ float DrawUtils::color[3];
 #define ColorIndex( c )	((( c ) - '0' ) & 7 )
 
 // console color typeing
+#ifdef __EMSCRIPTEN__
+extern byte g_color_table[][4];
+#else
 byte g_color_table[][4] =
 {
 {100, 100, 100, 255},	// should be black, but hud font is additive, so printing black characters is impossible
@@ -52,12 +55,13 @@ byte g_color_table[][4] =
 {255,   0, 255, 255},	// magenta
 {240, 180,  24, 255},	// default color (can be changed by user)
 };
+#endif
 
 int g_codepage = 0;
 qboolean g_accept_utf8;
 
 cvar_t *con_charset;
-cvar_t *cl_charset;
+// cvar_t *cl_charset;
 
 /*
 ============================

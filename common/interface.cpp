@@ -14,7 +14,7 @@
 #include <unistd.h>
 #define VRTLD_LIBDL_COMPAT
 #include <vrtld.h>
-#elif XASH_APPLE == 1
+#elif XASH_APPLE == 1 || __EMSCRIPTEN__
 #include <dlfcn.h>
 #include <unistd.h>
 #endif

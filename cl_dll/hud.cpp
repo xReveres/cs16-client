@@ -391,7 +391,7 @@ void CHud :: Init( void )
 	m_Menu.Init();
 	m_Scoreboard.Init();
 
-	GetClientVoice()->Init( &g_VoiceStatusHelper );
+	// GetClientVoice()->Init( &g_VoiceStatusHelper );
 
 	InitRain();
 

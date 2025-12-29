@@ -36,8 +36,8 @@ int KB_ConvertString( char *in, char **ppout );
 
 void Touch_CloseMenu()
 {
-	gMobileAPI.pfnTouchRemoveButton( "_menu_*" );
-	gMobileAPI.pfnTouchSetClientOnly( 0 );
+	// gMobileAPI.pfnTouchRemoveButton( "_menu_*" );
+	// gMobileAPI.pfnTouchSetClientOnly( 0 );
 }
 
 int CHudMenu :: Init( void )

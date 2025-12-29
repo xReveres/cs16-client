@@ -275,7 +275,7 @@ void DLLEXPORT HUD_Frame( double time )
 	gEngfuncs.VGui_ViewportPaintBackground(HUD_GetRect());
 #endif
 
-	GetClientVoice()->Frame( time );
+	//GetClientVoice()->Frame( time );
 }
 
 
@@ -305,7 +305,7 @@ void DLLEXPORT HUD_VoiceStatus(int entindex, qboolean bTalking)
 		}
 	}
 
-	GetClientVoice()->UpdateSpeakerStatus( entindex, bTalking );
+	//GetClientVoice()->UpdateSpeakerStatus( entindex, bTalking );
 }
 
 /*
@@ -425,14 +425,7 @@ extern "C" int DLLEXPORT HUD_GetPlayerTeam(int iplayer)
 
 cldll_func_dst_t *g_pcldstAddrs;
 
-extern "C" void DLLEXPORT F(void *pv)
-{
-	cldll_func_t *pcldll_func = (cldll_func_t *)pv;
-
-	// Hack!
-	g_pcldstAddrs = ((cldll_func_dst_t *)pcldll_func->pHudVidInitFunc);
-
-	cldll_func_t cldll_func =
+static cldll_func_t cldll_func =
 	{
 	Initialize,
 	HUD_Init,
@@ -443,9 +436,9 @@ extern "C" void DLLEXPORT F(void *pv)
 	HUD_PlayerMove,
 	HUD_PlayerMoveInit,
 	HUD_PlayerMoveTexture,
-	IN_ActivateMouse,
-	IN_DeactivateMouse,
-	IN_MouseEvent,
+	_IN_ActivateMouse,
+	_IN_DeactivateMouse,
+	_IN_MouseEvent,
 	IN_ClearStates,
 	IN_Accumulate,
 	CL_CreateMove,
@@ -475,9 +468,21 @@ extern "C" void DLLEXPORT F(void *pv)
 	HUD_DirectorMessage,
 	HUD_GetStudioModelInterface,
 	HUD_ChatInputPosition,
-	HUD_GetPlayerTeam,
-	NULL
-	};
+	// HUD_GetPlayerTeam,
+	// NULL
+	HUD_GetRenderInterface,
+	NULL,
+	NULL, // IN_ClientTouchEvent
+	IN_ClientMoveEvent,
+	IN_ClientLookEvent
+};
+
+extern "C" void DLLEXPORT F(void *pv)
+{
+	cldll_func_t *pcldll_func = (cldll_func_t *)pv;
+
+	// Hack!
+	g_pcldstAddrs = ((cldll_func_dst_t *)pcldll_func->pHudVidInitFunc);
 
 	*pcldll_func = cldll_func;
 }
@@ -499,26 +504,26 @@ public:
 	// ingame voice manipulation
 	virtual bool IsPlayerGameVoiceMuted( int playerIndex )
 	{
-		if ( GetClientVoice() )
-			return GetClientVoice()->IsPlayerBlocked( playerIndex );
+		// if ( GetClientVoice() )
+		// 	return GetClientVoice()->IsPlayerBlocked( playerIndex );
 
 		return false;
 	}
 
 	virtual void MutePlayerGameVoice( int playerIndex )
 	{
-		if ( GetClientVoice() )
-		{
-			GetClientVoice()->SetPlayerBlockedState( playerIndex, true );
-		}
+		// if ( GetClientVoice() )
+		// {
+		// 	GetClientVoice()->SetPlayerBlockedState( playerIndex, true );
+		// }
 	}
 
 	virtual void UnmutePlayerGameVoice( int playerIndex )
 	{
-		if ( GetClientVoice() )
-		{
-			GetClientVoice()->SetPlayerBlockedState( playerIndex, false );
-		}
+		// if ( GetClientVoice() )
+		// {
+		// 	GetClientVoice()->SetPlayerBlockedState( playerIndex, false );
+		// }
 	}
 };
 

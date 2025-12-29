@@ -9,6 +9,8 @@
 #include "enums.h"
 #endif
 
+#include "render_api.h"
+
 #define	MAX_ALIAS_NAME	32
 
 typedef struct cmdalias_s
@@ -115,8 +117,15 @@ typedef struct
 	HUD_DIRECTORMESSAGE_FUNC			pDirectorMessage;	// Possibly null on old client dlls.
 	HUD_STUDIO_INTERFACE_FUNC			pStudioInterface;	// Not used by all clients
 	HUD_CHATINPUTPOSITION_FUNC			pChatInputPosition;	// Not used by all clients
-	HUD_GETPLAYERTEAM					pGetPlayerTeam; // Not used by all clients
-	CLIENTFACTORY						pClientFactory;
+	// HUD_GETPLAYERTEAM					pGetPlayerTeam; // Not used by all clients
+	// CLIENTFACTORY						pClientFactory;
+	// Xash3D extension
+	int	(*pfnGetRenderInterface)( int version, render_api_t *renderfuncs, render_interface_t *callback );
+	void	(*pfnClipMoveToEntity)( struct physent_s *pe, const vec3_t start, vec3_t mins, vec3_t maxs, const vec3_t end, struct pmtrace_s *tr );
+	// Xash3D FWGS extension
+	int (*pfnTouchEvent)( int type, int fingerID, float x, float y, float dx, float dy );
+	void (*pfnMoveEvent)( float forwardmove, float sidemove );
+	void (*pfnLookEvent)( float relyaw, float relpitch );
 } cldll_func_t;
 
 // Function type declarations for client destination functions
