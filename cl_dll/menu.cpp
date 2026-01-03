@@ -270,6 +270,14 @@ void CHudMenu::UserCmd_OldStyleMenuClose()
 // lol, no real VGUI here
 // it's really good only for touchscreen
 
+#ifdef __EMSCRIPTEN__
+extern "C" void _FPS_UI_ShowVGUIMenu( int menuType );
+void CHudMenu::ShowVGUIMenu( int menuType )
+{
+	_FPS_UI_ShowVGUIMenu( menuType );
+}
+
+#else
 void CHudMenu::ShowVGUIMenu( int menuType )
 {
 	const char *szCmd;
@@ -348,6 +356,7 @@ void CHudMenu::ShowVGUIMenu( int menuType )
 	m_fMenuDisplayed = 1;
 	ClientCmd(szCmd);
 }
+#endif
 
 void CHudMenu::UserCmd_ShowVGUIMenu()
 {

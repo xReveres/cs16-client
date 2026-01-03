@@ -143,6 +143,10 @@ int CHudMoney::Draw(float flTime)
 	return 1;
 }
 
+#ifdef __EMSCRIPTEN__
+extern "C" void _FPS_UI_CurrentMoney(int teamnum);
+#endif
+
 int CHudMoney::MsgFunc_Money(const char *pszName, int iSize, void *pbuf)
 {
 	BufferReader buf( pszName, pbuf, iSize );
@@ -152,6 +156,11 @@ int CHudMoney::MsgFunc_Money(const char *pszName, int iSize, void *pbuf)
 	m_iDelta = m_iMoneyCount - iOldCount;
 	m_fFade = 5.0f; //fade for 5 seconds
 	m_iFlags |= HUD_DRAW;
+
+#ifdef __EMSCRIPTEN__
+	_FPS_UI_CurrentMoney(m_iMoneyCount);
+#endif
+
 	return 1;
 }
 

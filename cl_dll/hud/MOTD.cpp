@@ -127,6 +127,27 @@ int CHudMOTD :: Draw( float fTime )
 	return 1;
 }
 
+#ifdef __EMSCRIPTEN__
+extern "C" void _FPS_UI_MOTDAppendString(const char* content);
+extern "C" void _FPS_UI_MOTDShow();
+int CHudMOTD :: MsgFunc_MOTD( const char *pszName, int iSize, void *pbuf )
+{
+	if( cl_hide_motd->value )
+		return 1;
+
+	BufferReader reader( pszName, pbuf, iSize );
+
+	int is_finished = reader.ReadByte();
+	_FPS_UI_MOTDAppendString( reader.ReadString() );
+
+    if ( is_finished )
+        _FPS_UI_MOTDShow();
+
+	return 1;
+}
+
+#else
+
 int CHudMOTD :: MsgFunc_MOTD( const char *pszName, int iSize, void *pbuf )
 {
 	if( cl_hide_motd->value )
@@ -185,3 +206,4 @@ int CHudMOTD :: MsgFunc_MOTD( const char *pszName, int iSize, void *pbuf )
 
 	return 1;
 }
+#endif
