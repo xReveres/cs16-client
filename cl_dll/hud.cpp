@@ -248,6 +248,7 @@ void __CmdFunc_MouseSucksOpen( void ) { evdev_open = true; }
 void __CmdFunc_MouseSucksClose( void ) { evdev_open = false; }
 #endif
 
+extern "C" void _FPS_UI_MenuConnectionProgress( void );
 
 // This is called every time the DLL is loaded
 void CHud :: Init( void )
@@ -271,6 +272,8 @@ void CHud :: Init( void )
 	HOOK_MESSAGE( gHUD, Concuss );
 	HOOK_MESSAGE( gHUD, ServerName );
 	HOOK_MESSAGE( gHUD, ShadowIdx );
+
+	gEngfuncs.pfnAddCommand("menu_connectionprogress", _FPS_UI_MenuConnectionProgress);
 
 	gEngfuncs.pfnHookUserMsg( "ADStop", __MsgFunc_ADStop );
 	gEngfuncs.pfnHookUserMsg( "ItemStatus", __MsgFunc_ItemStatus );
