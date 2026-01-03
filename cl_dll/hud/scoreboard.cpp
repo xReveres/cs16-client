@@ -563,10 +563,6 @@ int CHudScoreboard :: MsgFunc_ScoreInfo( const char *pszName, int iSize, void *p
 	}
 
 	if (m_iPlayerNum == cl) {
-		char str[256];
-		sprintf( str, "ScoreInfo: %s, %d frags %d deaths %d class %d team %d\n", g_PlayerInfoList[cl].name, cl, frags, deaths, playerclass, teamnumber);
-		ConsolePrint( str );
-
 		_FPS_UI_CurrentTeam(teamnumber);
 	}
 
