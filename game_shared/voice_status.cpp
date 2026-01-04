@@ -130,7 +130,7 @@ void CVoiceStatus::Init( IVoiceStatusHelper *pHelper )
 	gEngfuncs.pfnHookUserMsg( "VoiceMask", __MsgFunc_VoiceMask );
 	gEngfuncs.pfnHookUserMsg( "ReqState", __MsgFunc_ReqState );
 
-	// GetClientVoiceHud()->Init( pHelper, this );
+	GetClientVoiceHud()->Init( pHelper, this );
 }
 
 void CVoiceStatus::Frame( double frametime )
@@ -336,7 +336,7 @@ void CVoiceStatus::UpdateSpeakerStatus( int entindex, bool bTalking )
 			}
 
 			int entindex = gEngfuncs.GetLocalPlayer()->index;
-			// GetClientVoiceHud()->UpdateSpeakerStatus( -2, bTalking );
+			GetClientVoiceHud()->UpdateSpeakerStatus( -2, bTalking );
 
 			m_VoicePlayers[entindex - 1] = m_bTalking;
 			m_VoiceEnabledPlayers[entindex - 1] = true;
@@ -351,7 +351,7 @@ void CVoiceStatus::UpdateSpeakerStatus( int entindex, bool bTalking )
 			if ( iClient < 0 )
 				return;
 
-			// GetClientVoiceHud()->UpdateSpeakerStatus( entindex, bTalking );
+			GetClientVoiceHud()->UpdateSpeakerStatus( entindex, bTalking );
 
 			if ( bTalking )
 			{
@@ -364,7 +364,7 @@ void CVoiceStatus::UpdateSpeakerStatus( int entindex, bool bTalking )
 			}
 		}
 
-		// GetClientVoiceHud()->RepositionLabels();
+		GetClientVoiceHud()->RepositionLabels();
 	}
 }
 
