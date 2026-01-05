@@ -248,7 +248,7 @@ int CHudDeathNotice :: MsgFunc_DeathMsg( const char *pszName, int iSize, void *p
 
 	rgDeathNoticeList[i].flDisplayTime = gHUD.m_flTime + hud_deathnotice_time->value;
 
-
+#if 0
 	if (rgDeathNoticeList[i].bNonPlayerKill)
 	{
 		ConsolePrint( rgDeathNoticeList[i].szKiller );
@@ -300,6 +300,7 @@ int CHudDeathNotice :: MsgFunc_DeathMsg( const char *pszName, int iSize, void *p
 		if( headshot ) ConsolePrint( " ***");
 		ConsolePrint( "\n" );
 	}
+#endif
 
 	return 1;
 }
