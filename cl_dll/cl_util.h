@@ -22,7 +22,9 @@
 #define FALSE 0
 #endif
 
+#ifndef __EMSCRIPTEN__
 extern cvar_t *hud_textmode;
+#endif
 
 #ifdef _MSC_VER
 #pragma warning(disable : 4244) // 'argument': conversion from 'float' to 'int', possible loss of data

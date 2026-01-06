@@ -1021,7 +1021,9 @@ public:
 	cvar_t *cl_min_t;
 	cvar_t *cl_min_ct;
 	cvar_t *cl_gunsmoke;
+#ifndef __EMSCRIPTEN__
 	cvar_t *hud_textmode;
+#endif
 	cvar_t *hud_colored;
 	cvar_t *cscl_currentmoney;
 	cvar_t *cscl_currentmap;

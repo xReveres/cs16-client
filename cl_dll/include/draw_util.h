@@ -95,38 +95,53 @@ public:
 
 	static inline int DrawConsoleString(int x, int y, const char *string)
 	{
+#ifndef __EMSCRIPTEN__
 		if ( gHUD.hud_textmode->value )
 		{
+#endif
 			int ret  = DrawHudString( x, y, 9999, (char *)string, color[0] * 255, color[1] * 255, color[2] * 255 );
 			color[0] = color[1] = color[2] = 1.0f;
 			return ret;
+#ifndef __EMSCRIPTEN__
 		}
 		else
 			return gEngfuncs.pfnDrawConsoleString( x, y, (char *)string );
+#endif
 	}
 
 	static inline void SetConsoleTextColor( float r, float g, float b )
 	{
+#ifndef __EMSCRIPTEN__
 		if ( gHUD.hud_textmode->value )
+#endif
 			color[0] = r, color[1] = g, color[2] = b;
+#ifndef __EMSCRIPTEN__
 		else
 			gEngfuncs.pfnDrawSetTextColor( r, g, b );
+#endif
 	}
 
 	static inline void SetConsoleTextColor( unsigned char r, unsigned char g, unsigned char b )
 	{
+#ifndef __EMSCRIPTEN__
 		if ( gHUD.hud_textmode->value )
+#endif
 			color[0] = r / 255.0f, color[1] = g / 255.0f, color[2] = b / 255.0f;
+#ifndef __EMSCRIPTEN__
 		else
 			gEngfuncs.pfnDrawSetTextColor( r / 255.0f, g / 255.0f, b / 255.0f );
+#endif
 	}
 
 	static inline int ConsoleStringLen(  const char *szIt )
 	{
+#ifndef __EMSCRIPTEN__
 		if ( gHUD.hud_textmode->value )
+#endif
 		{
 			return HudStringLen( (char *)szIt );
 		}
+#ifndef __EMSCRIPTEN__
 		else
 		{
 			int _width;
@@ -135,13 +150,16 @@ public:
 			gEngfuncs.pfnDrawConsoleStringLen( szIt, &_width, &_height );
 			return _width;
 		}
+#endif
 	}
 
 	static inline void ConsoleStringSize( const char *szIt, int *width, int *height )
 	{
+#ifndef __EMSCRIPTEN__
 		if ( gHUD.hud_textmode->value )
 			*height = 13, *width = HudStringLen( (char *)szIt );
 		else
+#endif
 			gEngfuncs.pfnDrawConsoleStringLen( szIt, width, height );
 	}
 

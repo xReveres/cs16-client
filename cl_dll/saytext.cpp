@@ -434,7 +434,7 @@ void CHudSayText :: SayTextPrint( const char *pszBuf, int iBufSize, int clientIn
 	}
 
 	m_iFlags |= HUD_DRAW;
-	PlaySound( "misc/talk.wav", 1 );
+	// PlaySound( "misc/talk.wav", 1 );
 
 	if( !g_iUser1 )
 	{
@@ -452,6 +452,7 @@ void CHudSayText :: EnsureTextFitsInOneLineAndWrapIfHaveTo( int line )
 {
 	int line_width = 0;
 	DrawUtils::ConsoleStringSize(g_szLineBuffer[line], &line_width, &line_height );
+	line_height += 2; // add a little extra space between lines
 
 	if ( (line_width + LINE_START) > MAX_LINE_WIDTH )
 	{ // string is too long to fit on line
@@ -484,6 +485,7 @@ void CHudSayText :: EnsureTextFitsInOneLineAndWrapIfHaveTo( int line )
 
 			buf[0] = *x;  // get the length of the current character
 			DrawUtils::ConsoleStringSize( buf, &tmp_len, &line_height );
+			line_height += 2; // add a little extra space between lines
 			length += tmp_len;
 
 			if ( length > MAX_LINE_WIDTH )
