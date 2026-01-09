@@ -677,6 +677,7 @@ public:
 private:
 	client_textmessage_t		*m_pMessages[maxHUDMessages];
 	float						m_startTime[maxHUDMessages];
+	float                       m_endTime[maxHUDMessages];
 	message_parms_t				m_parms;
 	float						m_gameTitleTime;
 	client_textmessage_t		*m_pGameTitle;

@@ -53,6 +53,7 @@ void CHudMessage::Reset( void )
 {
  	memset( m_pMessages, 0, sizeof( m_pMessages[0] ) * maxHUDMessages );
 	memset( m_startTime, 0, sizeof( m_startTime[0] ) * maxHUDMessages );
+	memset( m_endTime, 0, sizeof( m_endTime[0] ) * maxHUDMessages );
 	
 	m_gameTitleTime = 0;
 	m_pGameTitle = NULL;
@@ -329,7 +330,7 @@ int CHudMessage::Draw( float fTime )
 {
 	int i, drawn;
 	client_textmessage_t *pMessage;
-	float endTime;
+	//float endTime;
 
 	drawn = 0;
 
@@ -372,8 +373,19 @@ int CHudMessage::Draw( float fTime )
 		if ( m_pMessages[i] )
 		{
 			pMessage = m_pMessages[i];
-			if ( m_startTime[i] > gHUD.m_flTime )
+			if ( m_startTime[i] > gHUD.m_flTime ) {
 				m_startTime[i] = gHUD.m_flTime + m_parms.time - m_startTime[i] + 0.2;	// Server takes 0.2 seconds to spawn, adjust for this
+				switch( pMessage->effect )
+				{
+					case 0:
+					case 1:
+						m_endTime[i] = m_startTime[i] + pMessage->fadein + pMessage->fadeout + pMessage->holdtime;
+						break;
+					case 2:
+						m_endTime[i] = m_startTime[i] + (pMessage->fadein * strlen( pMessage->pMessage )) + pMessage->fadeout + pMessage->holdtime;
+						break;
+				}
+			}
 		}
 	}
 
@@ -384,22 +396,22 @@ int CHudMessage::Draw( float fTime )
 			pMessage = m_pMessages[i];
 
 			// This is when the message is over
-			switch( pMessage->effect )
-			{
-			// TODO: HACK to prevent crashing
-			default:
-			case 0:
-			case 1:
-				endTime = m_startTime[i] + pMessage->fadein + pMessage->fadeout + pMessage->holdtime;
-				break;
+			// switch( pMessage->effect )
+			// {
+			// // TODO: HACK to prevent crashing
+			// default:
+			// case 0:
+			// case 1:
+			// 	endTime = m_startTime[i] + pMessage->fadein + pMessage->fadeout + pMessage->holdtime;
+			// 	break;
 			
-			// Fade in is per character in scanning messages
-			case 2:
-				endTime = m_startTime[i] + (pMessage->fadein * strlen( pMessage->pMessage )) + pMessage->fadeout + pMessage->holdtime;
-				break;
-			}
+			// // Fade in is per character in scanning messages
+			// case 2:
+			// 	endTime = m_startTime[i] + (pMessage->fadein * strlen( pMessage->pMessage )) + pMessage->fadeout + pMessage->holdtime;
+			// 	break;
+			// }
 
-			if ( fTime <= endTime )
+			if ( fTime <= m_endTime[i] )
 			{
 				float messageTime = fTime - m_startTime[i];
 
@@ -499,34 +511,44 @@ void CHudMessage::MessageAdd( const char *pName, float time )
                 return; // bail out if message is empty
             }
 
-			for ( j = 0; j < maxHUDMessages; j++ )
-			{
-				if ( m_pMessages[j] )
-				{
-					// is this message already in the list
-					if ( !strcmp( message->pMessage, m_pMessages[j]->pMessage ) )
-					{
-						if( !strcmp( message->pName, "Custom" ) )
-						{
-							delete[] message->pMessage;
-						}
-						return;
-					}
+			// for ( j = 0; j < maxHUDMessages; j++ )
+			// {
+			// 	if ( m_pMessages[j] )
+			// 	{
+			// 		// is this message already in the list
+			// 		if ( !strcmp( message->pMessage, m_pMessages[j]->pMessage ) )
+			// 		{
+			// 			if( !strcmp( message->pName, "Custom" ) )
+			// 			{
+			// 				delete[] message->pMessage;
+			// 			}
+			// 			return;
+			// 		}
 
-					// get rid of any other messages in same location (only one displays at a time)
-					if ( fabs( message->y - m_pMessages[j]->y ) < 0.0001 && fabs( message->x - m_pMessages[j]->x ) < 0.0001 )
-					{
-						if( !strcmp( m_pMessages[j]->pName, "Custom" ) )
-						{
-							delete[] m_pMessages[j]->pMessage;
-						}
-						m_pMessages[j] = NULL;
-					}
-				}
-			}
+			// 		// get rid of any other messages in same location (only one displays at a time)
+			// 		if ( fabs( message->y - m_pMessages[j]->y ) < 0.0001 && fabs( message->x - m_pMessages[j]->x ) < 0.0001 )
+			// 		{
+			// 			if( !strcmp( m_pMessages[j]->pName, "Custom" ) )
+			// 			{
+			// 				delete[] m_pMessages[j]->pMessage;
+			// 			}
+			// 			m_pMessages[j] = NULL;
+			// 		}
+			// 	}
+			// }
 
 			m_pMessages[i] = message;
 			m_startTime[i] = time;
+			switch (message->effect)
+			{
+			case 0:
+			case 1:
+				m_endTime[i] = m_startTime[i] + message->fadein + message->fadeout + message->holdtime;
+				break;
+			case 2:
+				m_endTime[i] = m_startTime[i] + (message->fadein * strlen( message->pMessage )) + message->fadeout + message->holdtime;
+				break;
+			}
 			return;
 		}
 	}
@@ -588,6 +610,16 @@ void CHudMessage::MessageAdd(client_textmessage_t * newMessage )
 		{
 			m_pMessages[i] = message;
 			m_startTime[i] = gHUD.m_flTime;
+			switch (message->effect)
+			{
+			case 0:
+			case 1:
+				m_endTime[i] = m_startTime[i] + message->fadein + message->fadeout + message->holdtime;
+				break;
+			case 2:
+				m_endTime[i] = m_startTime[i] + (message->fadein * strlen( message->pMessage )) + message->fadeout + message->holdtime;
+				break;
+			}
 			return;
 		}
 	}
