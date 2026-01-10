@@ -37,7 +37,14 @@ void EV_CreateSmoke(event_args_s *args)
 
 	if( !args->bparam2 ) //first explosion
 	{
+		// Ensure sprite is loaded before use
+		if( !gHUD.m_hGasPuff )
+			gHUD.m_hGasPuff = SPR_Load("sprites/gas_puff_01.spr");
+
 		const model_t *pGasModel = gEngfuncs.GetSpritePointer(gHUD.m_hGasPuff);
+
+		if( !pGasModel )
+			return; // sprite not available, skip smoke effect
 
 		for( int i = 0; i < SMOKE_CLOUDS; i++ )
 		{
