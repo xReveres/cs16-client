@@ -37,10 +37,6 @@ void EV_CreateSmoke(event_args_s *args)
 
 	if( !args->bparam2 ) //first explosion
 	{
-		// Ensure sprite is loaded before use
-		if( !gHUD.m_hGasPuff )
-			gHUD.m_hGasPuff = SPR_Load("sprites/gas_puff_01.spr");
-
 		const model_t *pGasModel = gEngfuncs.GetSpritePointer(gHUD.m_hGasPuff);
 
 		if( !pGasModel )
@@ -71,7 +67,7 @@ void EV_CreateSmoke(event_args_s *args)
 						te->entity.curstate.renderamt = 255.0f - (currenttime - te->entity.curstate.fuser3) * te->entity.baseline.renderamt ;
 						if( te->entity.curstate.renderamt < 0 ) te->entity.curstate.renderamt = 0;
 					}
-					EV_CS16Client_KillEveryRound( te, frametime, currenttime );
+					// EV_CS16Client_KillEveryRound( te, frametime, currenttime );
 				};
 
 				// !!! Setup model !!!
@@ -97,6 +93,10 @@ void EV_CreateSmoke(event_args_s *args)
 				{
 					gHUD.m_Spectator.AddOverviewEntityToList( gHUD.m_hGasPuff, &pTemp->entity, 14.0f );
 				}
+			}
+			else
+			{
+				gEngfuncs.Con_Printf("EV_CreateSmoke: couldn't create temp entity for smoke cloud\n");
 			}
 		}
 	}
