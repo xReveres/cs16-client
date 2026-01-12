@@ -67,7 +67,7 @@ void EV_CreateSmoke(event_args_s *args)
 						te->entity.curstate.renderamt = 255.0f - (currenttime - te->entity.curstate.fuser3) * te->entity.baseline.renderamt ;
 						if( te->entity.curstate.renderamt < 0 ) te->entity.curstate.renderamt = 0;
 					}
-					// EV_CS16Client_KillEveryRound( te, frametime, currenttime );
+					EV_CS16Client_KillEveryRound( te, frametime, te->entity.curstate.fuser4 );
 				};
 
 				// !!! Setup model !!!
