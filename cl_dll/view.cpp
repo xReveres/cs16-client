@@ -904,8 +904,30 @@ void V_CalcNormalRefdef ( struct ref_params_s *pparams )
 	if( gHUD.m_iFOV <= 40 )
 		view->model = NULL;
 
-	// Add in the punchangle, if any
-	pparams->viewangles = pparams->viewangles + pparams->punchangle;
+	// Add in the punchangle with CS 1.6 style behavior
+	static vec3_t smooth_punchangle = {0, 0, 0};
+	static vec3_t last_punchangle = {0, 0, 0};
+	
+	// CS 1.6 style: fast rise, slow decay
+	float rise_factor = 75.0f * pparams->frametime;  // Fast application of new recoil
+	float decay_factor = 36.0f * pparams->frametime; // Slower return to zero
+	
+	for(int i = 0; i < 3; i++)
+	{
+		if(fabs(pparams->punchangle[i]) > fabs(last_punchangle[i]))
+		{
+			// Punch is increasing - apply quickly (recoil kick)
+			smooth_punchangle[i] = smooth_punchangle[i] + (pparams->punchangle[i] - smooth_punchangle[i]) * rise_factor;
+		}
+		else
+		{
+			// Punch is decreasing - decay slowly (recovery)
+			smooth_punchangle[i] = smooth_punchangle[i] + (pparams->punchangle[i] - smooth_punchangle[i]) * decay_factor;
+		}
+	}
+	
+	VectorCopy(pparams->punchangle, last_punchangle);
+	pparams->viewangles = pparams->viewangles + smooth_punchangle;
 
 #if 0
 	// Include client side punch, too
