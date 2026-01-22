@@ -85,6 +85,11 @@ int CHud :: Redraw( float flTime, int intermission )
 {
 	GetScreenInfo( &m_scrinfo );
 
+	m_truescrinfo.iWidth = CVAR_GET_FLOAT("width");
+	m_truescrinfo.iHeight = CVAR_GET_FLOAT("height");
+
+	m_flScale = (float)TrueWidth / (float)ScreenWidth;
+
 	m_fOldTime = m_flTime;	// save time of previous redraw
 	m_flTime = flTime;
 	m_flTimeDelta = (double)m_flTime - m_fOldTime;

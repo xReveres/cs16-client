@@ -84,6 +84,11 @@ int CHudSniperScope::Draw(float flTime)
 	if(gHUD.m_iFOV > 40)
 		return 1;
 
+	left = (TrueWidth - TrueHeight)/2.0;
+	right = left + TrueHeight;
+	centerx = TrueWidth/2.0;
+	centery = TrueHeight/2.0;
+
 	gEngfuncs.pTriAPI->RenderMode(kRenderTransColor);
 	gEngfuncs.pTriAPI->Brightness(1.0);
 	gEngfuncs.pTriAPI->Color4ub(0, 0, 0, 255);
